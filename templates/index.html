@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sushi</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap");
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body style="font-family: 'Poppins', sans-serif">
+    <header class="py-10 bg-gradient-to-r from-[#ECEEF5] px-2 md:px-[20%]">
+      <div class="flex items-center justify-between">
+        <div class="tracking-wider font-bold text-red-600 text-2xl md:text-3xl">
+          Sushi
+        </div>
+        <a
+          href="https://t.me/gram_job_board_bot"
+          class="p-3 text-sm font-semibold md:p-5 bg-red-500 tracking-widest text-white rounded-sm"
+        >
+          Post a Job
+        </a>
+      </div>
+      <p
+        class="text-center font-bold text-[2rem] md:text-[3rem] tracking-wide my-10"
+      >
+        The Official Rust Job Board
+      </p>
+      <p class="text-center tracking-widest text-sm md:text-md">
+        “Sushi is our first stop whenever we're hiring a Rust role. We've hired
+        5 Rust developers in the last few years, all thanks to Sushi.” — Naruto
+        Uzamaki, Miru
+      </p>
+      <div class="my-4 md:my-6 flex items-center space-x-10 overflow-x-auto">
+        <img
+          src="public/mailchimp.svg"
+          alt="mailchimp brand logo"
+          class="w-24 h-24"
+        />
+        <img
+          src="public/twitch.svg"
+          alt="twitch brand logo"
+          class="w-20 h-20"
+        />
+        <img
+          src="public/tesla.svg"
+          alt="microsoft brand logo"
+          class="w-24 h-24"
+        />
+        <img
+          src="public/notion.svg"
+          alt="notion brand logo"
+          class="w-24 h-24"
+        />
+        <img
+          src="public/msft.svg"
+          alt="microsoft brand logo"
+          class="w-24 h-24"
+        />
+        <img
+          src="public/discord.svg"
+          alt="discord brand logo"
+          class="w-24 h-24"
+        />
+        <img
+          src="public/netflix.svg"
+          alt="netflix brand logo"
+          class="w-24 h-24"
+        />
+      </div>
+    </header>
+
+    <main class="px-4 md:px-[20%] py-10 tracking-widest text-lg space-y-6">
+      {% for job in jobs %}
+      <section
+        class="p-5 mx-auto shadow-lg rounded-lg space-y-2 border border-1 cursor-pointer"
+      >
+        <div class="md:flex items-center justify-between text-sm">
+          <p>{{ job.company_name}}</p>
+          <div class="flex items-center space-x-5">
+            <div class="flex items-center space-x-2 my-2 md:my-0">
+              <i data-lucide="map-pin" class="w-5 h-5"></i>
+              <p>{{ job.location }}</p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <i data-lucide="calendar-range" class="w-5 h-5"></i>
+              <p>5d</p>
+            </div>
+          </div>
+        </div>
+        <p class="text-md md:text-lg font-semibold">{{ job.job_title }}</p>
+        <p class="text-sm">Full Time - {{ job.salary_range }}</p>
+      </section>
+      {% endfor %}
+    </main>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
