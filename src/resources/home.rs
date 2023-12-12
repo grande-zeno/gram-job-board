@@ -29,7 +29,7 @@ struct Job {
 
 pub async fn jobs(State(state): State<SharedState>) -> impl IntoResponse {
     let query = sqlx::query_as::<_, Job>(
-        "select id, company_name, location, salary_range, job_title from jobs order by id desc"
+        "select id, company_name, location, salary_range, job_title from jobs order by id desc",
     )
     .fetch_all(&state.pool)
     .await;
