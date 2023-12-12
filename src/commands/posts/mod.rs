@@ -4,11 +4,17 @@ pub mod salary;
 pub mod title;
 
 pub use super::BotResult;
-pub use company::receive_company_name;
-pub use location::receive_location;
-pub use salary::receive_salary_range;
-pub use teloxide::{dispatching::dialogue::InMemStorage, prelude::*};
-pub use title::receive_job_title;
+use company::receive_company_name;
+use location::receive_location;
+use salary::receive_salary_range;
+use title::receive_job_title;
+use teloxide::{
+    dispatching::{
+        dialogue::InMemStorage, 
+        DpHandlerDescription
+    }, 
+    prelude::*
+};
 
 use crate::SharedState;
 
@@ -35,13 +41,36 @@ pub enum State {
 
 #[derive(sqlx::FromRow)]
 struct Job {
-    id: i32,
+    job_id: String,
     company_name: String,
     location: String,
     salary_range: String,
     job_title: String,
 }
-
+pub fn post_updates() -> Handler<'static, DependencyMap, BotResult, DpHandlerDescription>{
+    Update::filter_message()
+    .enter_dialogue::<Message, InMemStorage<State>, State>()
+    .branch(dptree::case![State::ReceiveCompanyName].endpoint(receive_company_name))
+    .branch(
+        dptree::case![State::ReceiveTitle { company_name }]
+            .endpoint(receive_job_title),
+    )
+    .branch(
+        dptree::case![State::ReceiveSalaryRange {
+            company_name,
+            title
+        }]
+        .endpoint(receive_salary_range),
+    )
+    .branch(
+        dptree::case![State::ReceiveLocation {
+            company_name,
+            title,
+            salary_range
+        }]
+        .endpoint(receive_location),
+    )
+}
 pub async fn myjobs(bot: Bot, state: SharedState, msg: Message) -> BotResult {
     let user_exists_query = sqlx::query("SELECT user_id FROM jobs WHERE user_id = $1")
         .bind(msg.chat.id.0.to_string())
@@ -61,11 +90,12 @@ pub async fn myjobs(bot: Bot, state: SharedState, msg: Message) -> BotResult {
 
                     for job in jobs {
                         let formatted_string = format!(
-                            "Company name: {}
-                        \nTitle: {}
-                        \nSalary Range: {}
-                        \nLocation: {}\n\n",
-                            job.company_name, job.job_title, job.salary_range, job.location
+                            "Code name: {}\nCompany name: {}\nTitle: {}\nSalary Range: {}\nLocation: {}\n\n",
+                            job.job_id,
+                            job.company_name, 
+                            job.job_title, 
+                            job.salary_range, 
+                            job.location
                         );
 
                         job_string.push_str(&formatted_string);
