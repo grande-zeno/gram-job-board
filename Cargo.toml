@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 askama = "0.12.1"
 axum = "0.6.20"
+random_name_generator = "0.3.6"
 shuttle-axum = "0.33.0"
 shuttle-runtime = "0.33.0"
 shuttle-secrets = "0.33.0"
