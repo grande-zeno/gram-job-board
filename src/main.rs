@@ -1,6 +1,5 @@
 use gram_job_board::{AppState, BackgroundServices};
 use shuttle_secrets::SecretStore;
-use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
 use std::{process, sync::Arc};
 
