@@ -1,7 +1,7 @@
 use super::{BotResult, PostDialogue};
 use crate::SharedState;
+use rnglib::{Language, RNG};
 use teloxide::prelude::*;
-use rnglib::{RNG, Language};
 
 pub async fn receive_location(
     bot: Bot,
@@ -13,7 +13,7 @@ pub async fn receive_location(
     match msg.text() {
         Some(location) => {
             let rng = RNG::try_from(&Language::Fantasy).unwrap();
-    
+
             let random_job_name = rng.generate_name();
 
             let query = sqlx::query("INSERT INTO jobs (job_id, user_id, company_name, location, salary_range, job_title) VALUES ($1, $2, $3, $4, $5, $6)")
