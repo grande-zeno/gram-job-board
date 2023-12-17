@@ -1,5 +1,4 @@
 use super::{BotResult, EditDialogue, EditState};
-use crate::SharedState;
 use teloxide::prelude::*;
 
 pub async fn receive_codename(bot: Bot, dialogue: EditDialogue, msg: Message) -> BotResult {
