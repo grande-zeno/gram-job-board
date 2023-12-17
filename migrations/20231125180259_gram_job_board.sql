@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS jobs (
     company_name varchar not null,
     location varchar not null,
     salary_range varchar not null,
-    job_title varchar not null
+    job_title varchar not null,
+    created_at timestamptz default current_timestamp
 );
