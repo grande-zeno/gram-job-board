@@ -5,6 +5,7 @@ use axum::{
     http::StatusCode,
     response::{Html, IntoResponse},
 };
+use chrono::{DateTime, Local};
 
 #[derive(Template)]
 #[template(path = "index.html")]
@@ -24,14 +25,13 @@ struct Job {
     location: String,
     salary_range: String,
     job_title: String,
+    created_at: DateTime<Local>,
 }
 
 pub async fn jobs(State(state): State<SharedState>) -> impl IntoResponse {
-    let query = sqlx::query_as::<_, Job>(
-        "select company_name, location, salary_range, job_title from jobs order by id desc",
-    )
-    .fetch_all(&state.pool)
-    .await;
+    let query = sqlx::query_as::<_, Job>("select * from jobs order by id desc")
+        .fetch_all(&state.pool)
+        .await;
 
     match query {
         Ok(jobs) => {
