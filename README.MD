@@ -10,7 +10,7 @@ To get started here's the username of the telegram bot:
 @gram_job_board_bot
 ```
 
-The backend might be asleep if you hop onto to telegram and find that it isin't responding to your texts 😙.
+The backend might be asleep if you hop onto to telegram and find that it isn't responding to your texts 😙.
 
 If you want to test the app, clone the app, create a Secrets.toml file, head over to telegram.
 Search for BotFather. Create your own teloxide token and type the following into your Secrets.toml file.
