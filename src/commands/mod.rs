@@ -1,15 +1,13 @@
-pub mod posts;
-pub mod edits;
 pub mod delete;
+pub mod edits;
+pub mod myjobs;
+pub mod posts;
 
 use crate::SharedState;
-use posts::*;
+pub use edits::*;
+pub use posts::*;
 use std::error::Error;
-use teloxide::{
-    dispatching::dialogue::InMemStorage, 
-    utils::command::BotCommands,
-    prelude::*
-};
+use teloxide::{dispatching::dialogue::InMemStorage, prelude::*, utils::command::BotCommands};
 
 pub type BotResult = Result<(), Box<dyn Error + Send + Sync>>;
 
@@ -36,24 +34,18 @@ async fn answer(
     msg: Message,
     cmd: Command,
     dialogue: PostDialogue,
+    edit_dialogue: EditDialogue,
     state: SharedState,
 ) -> BotResult {
     match cmd {
         Command::Help => {
             bot.send_message(msg.chat.id, Command::descriptions().to_string())
                 .await?;
-        },
-        Command::Post => {
-            bot.send_message(msg.chat.id, "Let's start! What's your company name?")
-                .await?;
-            dialogue.update(State::ReceiveCompanyName).await?;
-        },
-        Command::MyJobs => posts::myjobs(bot, state, msg).await?,
-        Command::Edit => {
-            bot.send_message(msg.chat.id, "Let's edit this")
-                .await?;
-        },
-        Command::Delete(job) => delete::delete_job(job, bot, msg, state).await?
+        }
+        Command::Post => posts::start(bot, dialogue, msg).await?,
+        Command::MyJobs => myjobs::myjobs(bot, state, msg).await?,
+        Command::Edit => edits::start(bot, edit_dialogue, msg).await?,
+        Command::Delete(code_name) => delete::delete_job(code_name, bot, msg, state).await?,
     }
     Ok(())
 }
@@ -73,13 +65,19 @@ pub async fn run(state: SharedState) {
             .branch(
                 Update::filter_message()
                     .enter_dialogue::<Message, InMemStorage<State>, State>()
+                    .enter_dialogue::<Message, InMemStorage<EditState>, EditState>()
                     .filter_command::<Command>()
                     .endpoint(answer),
             )
             .branch(posts::post_updates())
+            .branch(edits::edit_updates())
             .branch(Update::filter_message().endpoint(handle_other_updates)),
     )
-    .dependencies(dptree::deps![state, InMemStorage::<State>::new()])
+    .dependencies(dptree::deps![
+        state,
+        InMemStorage::<State>::new(),
+        InMemStorage::<EditState>::new()
+    ])
     .enable_ctrlc_handler()
     .build()
     .dispatch()
