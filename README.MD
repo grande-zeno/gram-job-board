@@ -13,7 +13,7 @@ To get started here's the username of the telegram bot:
 The backend might be asleep if you hop onto to telegram and find that it isn't responding to your texts 😙.
 
 If you want to test the app, clone the app, create a Secrets.toml file, head over to telegram.
-Search for BotFather. Create your own teloxide token and type the following into your Secrets.toml file.
+Search for BotFather. Create your own telegram bot. A teloxide token will be provided for that bot. Type the following into your Secrets.toml file.
 
 ```
 TELOXIDE_TOKEN="1234:blahblahblah"
