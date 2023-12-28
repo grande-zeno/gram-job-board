@@ -1,6 +1,6 @@
 ## About the project
 
-This is a telegram job board with a web interface. As a last ditch effort (🥲) to use rust on the backend, I decided to build a telegram job board bot that leverages telegram to create, update, delete and enable a user to view all the jobs they posted. You heard it here first. No more forms! Enhanced DX. Aisee 🤌.
+This is a telegram job board bot with a web interface. As a last ditch effort (🥲) to use rust on the backend, I decided to build a telegram job board bot that leverages telegram to create, update, delete and enable a user to view all the jobs they posted. You heard it here first. No more forms! Enhanced DX. Aisee 🤌.
 
 ## Getting Started
 
